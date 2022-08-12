@@ -1,26 +1,38 @@
 module.exports = function check(str, bracketsConfig) {
-   const arrOpen = ['(', '[', '{', '||'];
-   const close = {
-      [')']: '(',
-      [']']: '[',
+   const open = ['(', '{', '[', '|'];
+   const end = {
+     [')']: '(',
       ['}']: '{',
+      [']']: '[',
       ['|']: '|',
+   };
+
+   function isBracketsOk(strAll) {
+      let stack = [];
+  
+      for (let i = 0; i < strAll.length; i++) {
+        let item = strAll[i];
+        
+        if (open.includes(item)) {
+          stack.push(item);
+        } else {
+          if (stack.length === 0) {
+            return false;
+          }
+  
+          let topElement = stack[stack.length - 1];
+  
+          if (end[item] === topElement) {
+            stack.pop();
+          } else {
+            return false;
+          }
+        }
+      }
+  
+      return stack.length === 0;
    }
-
-let arr = [];
-
-for (let i = 0; i < str.length; i++){
-   let strItem = str[i];
-   if (arrOpen.includes(strItem)) {
-      arr.push(strItem)
-   }
-   let topElement = arr[arr.length - 1];
-   if (close[strItem] === topElement) {
-      arr.pop()
-   } 
-   return arr.length === 0;
-}
-
+   return isBracketsOk(str)
 }
 
 
